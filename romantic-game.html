@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be Mine?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 182, 193, 0.8);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 182, 193, 0.3);
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #d63384;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .message {
+            font-size: 1.3em;
+            color: #6c757d;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            height: 80px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            transform: scale(1);
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(40, 167, 69, 0.4);
+        }
+
+        .no-btn {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+            position: absolute;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .no-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .celebration {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 182, 193, 0.9);
+            border-radius: 30px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: celebrationFade 0.5s ease-in;
+        }
+
+        @keyframes celebrationFade {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .celebration h2 {
+            font-size: 2.5em;
+            color: #d63384;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .celebration p {
+            font-size: 1.2em;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .creator-credit {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9em;
+            color: #6c757d;
+            opacity: 0.8;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .creator-credit p {
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 24px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="game-container">
+        <h1 class="title">💕 Will You Be Mine? 💕</h1>
+        <p class="message" id="message">
+            Every moment with you feels like magic ✨<br>
+            You light up my world like nobody else 🌟<br>
+            Will you be my special someone? 💖
+        </p>
+        
+        <div class="buttons-container">
+            <button class="btn yes-btn" onclick="selectYes()">Yes! 💕</button>
+            <button class="btn no-btn" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No 💔</button>
+        </div>
+        
+        <div class="celebration" id="celebration">
+            <div class="sparkles" id="sparkles"></div>
+            <h2>🎉 Yay! 🎉</h2>
+            <p>You've made me the happiest person alive! 💕<br>
+            Our love story begins now... 🌹</p>
+        </div>
+        
+        <div class="creator-credit">
+            <p>Created with 💕 by Ayush Vaibhavi</p>
+        </div>
+    </div>
+
+    <script>
+        const lovingMessages = [
+            "Every moment with you feels like magic ✨<br>You light up my world like nobody else 🌟<br>Will you be my special someone? 💖",
+            "You're the missing piece to my puzzle 🧩<br>My heart beats only for you 💓<br>Please say yes? 🥺",
+            "Like stars in the sky, you brighten my night 🌙<br>You're my sunshine on cloudy days ☀️<br>Will you choose love? 💝",
+            "In a world full of chaos, you're my peace 🕊️<br>You make every day feel like Valentine's Day 💐<br>Be mine forever? 💍",
+            "You're the melody to my heart's song 🎵<br>The smile that makes everything worthwhile 😊<br>Choose us? 💞"
+        ];
+
+        let messageIndex = 0;
+        let noButtonClicks = 0;
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💖';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 6 + 's';
+            heart.style.animationDuration = (Math.random() * 3 + 6) + 's';
+            document.getElementById('hearts').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 9000);
+        }
+
+        // Create hearts continuously
+        setInterval(createHeart, 800);
+
+        function moveNoButton() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.querySelector('.buttons-container');
+            
+            // Change message each time
+            messageIndex = (messageIndex + 1) % lovingMessages.length;
+            document.getElementById('message').innerHTML = lovingMessages[messageIndex];
+            noButtonClicks++;
+            
+            // Make Yes button bigger each time
+            const yesBtn = document.querySelector('.yes-btn');
+            const newScale = 1 + (noButtonClicks * 0.1);
+            yesBtn.style.transform = `scale(${Math.min(newScale, 1.5)})`;
+            
+            // Random position for No button
+            const containerRect = container.getBoundingClientRect();
+            const maxX = containerRect.width - 120;
+            const maxY = containerRect.height - 50;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            // Add wobble effect
+            noBtn.style.animation = 'none';
+            setTimeout(() => {
+                noBtn.style.animation = 'wobble 0.5s ease';
+            }, 10);
+            
+            // Encouraging text changes
+            if (noButtonClicks > 3) {
+                noBtn.textContent = "Really? 🥺";
+            }
+            if (noButtonClicks > 6) {
+                noBtn.textContent = "Pretty please? 🙏";
+            }
+            if (noButtonClicks > 10) {
+                noBtn.textContent = "I'll wait... 💕";
+            }
+        }
+
+        function selectYes() {
+            const celebration = document.getElementById('celebration');
+            celebration.style.display = 'flex';
+            
+            // Create sparkles
+            createSparkles();
+            
+            // Play celebration sound (visual feedback)
+            document.body.style.animation = 'none';
+            setTimeout(() => {
+                document.body.style.background = 'linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3)';
+                document.body.style.backgroundSize = '400% 400%';
+                document.body.style.animation = 'gradientShift 2s ease infinite';
+            }, 100);
+        }
+
+        function createSparkles() {
+            const sparklesContainer = document.getElementById('sparkles');
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.innerHTML = '✨';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animationDelay = Math.random() * 2 + 's';
+                    sparklesContainer.appendChild(sparkle);
+                    
+                    setTimeout(() => sparkle.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        // Add CSS for wobble animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes wobble {
+                0% { transform: rotate(0deg); }
+                25% { transform: rotate(-5deg); }
+                75% { transform: rotate(5deg); }
+                100% { transform: rotate(0deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
